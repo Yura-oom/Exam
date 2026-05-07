@@ -18,6 +18,7 @@
 				padding: 12px 18px;
 				margin-bottom: 20px;
 				color: #222;
+				
 			}
 
 			.subject-delete-done-message {

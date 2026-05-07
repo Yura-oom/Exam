@@ -17,6 +17,7 @@
 				font-weight: bold;
 				color: #222;
 				margin-bottom: 28px;
+				
 			}
 
 			.subject-delete-message {
