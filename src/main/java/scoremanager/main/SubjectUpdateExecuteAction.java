@@ -25,26 +25,39 @@ public class SubjectUpdateExecuteAction extends Action {
             return;
         }
         
-        //更新した状態のsubjectを作成
-        Subject subject = new Subject();
+        //教科名が20文字以上の場合は更新できないので入力画面に戻す
+        if (name.length() > 20) {
+        	request.setAttribute("cd", cd);
+        	request.setAttribute("name", name);
+        	request.setAttribute("error2", "教科名は20文字以内にしてください");
+        	request.getRequestDispatcher("/scoremanager/main/subject_update.jsp")
+        		.forward(request, response);
+        }else if(cd == null) {
+        	request.setAttribute("error", "科目が存在していません");
+		}else {
+			//更新した状態のsubjectを作成
+	        Subject subject = new Subject();
+	        
+	        subject.setCd(cd);
+	        subject.setName(name);
+	        subject.setSchool(teacher.getSchool());
+	        
+	        //DB更新
+	        SubjectDao dao = new SubjectDao();
+	        boolean result = dao.save(subject);
+	        
+	        if (result) {
+	            //更新成功
+	            request.getRequestDispatcher("/scoremanager/main/subject_update_done.jsp")
+	                   .forward(request, response);
+	        } else {
+	            // 更新失敗
+	            request.setAttribute("error", "登録に失敗しました。");
+	            request.getRequestDispatcher("/scoremanager/main/subject_update.jsp")
+	                   .forward(request, response);
+	        }
+		}
         
-        subject.setCd(cd);
-        subject.setName(name);
-        subject.setSchool(teacher.getSchool());
         
-        //DB更新
-        SubjectDao dao = new SubjectDao();
-        boolean result = dao.save(subject);
-        
-        if (result) {
-            //更新成功
-            request.getRequestDispatcher("/scoremanager/main/subject_update_done.jsp")
-                   .forward(request, response);
-        } else {
-            // 更新失敗
-            request.setAttribute("error", "登録に失敗しました。");
-            request.getRequestDispatcher("/scoremanager/main/subject_update.jsp")
-                   .forward(request, response);
-        }
 	}
 }

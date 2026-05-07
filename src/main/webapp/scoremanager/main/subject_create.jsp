@@ -11,6 +11,12 @@
 				min-height: 400px;
 				padding: 15px 10px 0 10px;
 			}
+			
+			.subject-create-error {
+				color: #f0a020;
+				font-size: 12px;
+				margin: 0 0 18px 0;
+			}
 
 			.form-title {
 				background-color: #eeeeee;
@@ -80,11 +86,19 @@
 					<label>科目コード</label>
 					<input type="text" name="cd" placeholder="科目コードを入力してください">
 				</div>
+				
+				<c:if test="${not empty error}">
+						<div class="subject-create-error">${error}</div>
+				</c:if>
 
 				<div class="form-group">
 					<label>科目名</label>
 					<input type="text" name="name" placeholder="科目名を入力してください">
 				</div>
+				
+				<c:if test="${not empty error2}">
+						<div class="subject-create-error">${error2}</div>
+				</c:if>
 
 				<div class="form-actions">
 					<input type="submit" value="登録" class="btn-submit">

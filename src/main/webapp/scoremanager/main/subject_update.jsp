@@ -103,6 +103,10 @@
 						placeholder="科目名を入力してください"
 						required
 					>
+					
+					<c:if test="${not empty error2}">
+						<div class="subject-update-error">${error2}</div>
+					</c:if>
 
 					<div>
 						<button type="submit" class="subject-update-btn">変更</button>

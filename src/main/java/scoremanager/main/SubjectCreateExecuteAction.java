@@ -26,29 +26,48 @@ public class SubjectCreateExecuteAction extends Action {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-
         School school = teacher.getSchool();
         
-
-        // Subjectオブジェクト作成
-        Subject subject = new Subject();
-        subject.setCd(cd);
-        subject.setName(name);
-        subject.setSchool(school);
-
-        // DB登録
-        SubjectDao dao = new SubjectDao();
-        boolean result = dao.save(subject);
-
-        if (result) {
-            // 登録成功
-            request.getRequestDispatcher("/scoremanager/main/subject_create_done.jsp")
-                   .forward(request, response);
-        } else {
-            // 登録失敗
-            request.setAttribute("error", "登録に失敗しました。");
-            request.getRequestDispatcher("/scoremanager/main/subject_create.jsp")
-                   .forward(request, response);
+        SubjectDao subjectDao = new SubjectDao();
+        Subject old = subjectDao.get(cd, school);
+        
+        //科目コードは3文字、科目名は20文字以内にしてもらう
+        //それ以外の場合は入力画面に戻す
+        if (cd.length() > 3) {
+        	request.setAttribute("error", "科目コードは3文字にしてください");
+        	request.getRequestDispatcher("/scoremanager/main/subject_create.jsp")
+            .forward(request, response);
+        }else if(name.length() > 20) {
+        	request.setAttribute("error2", "科目名は20文字以内にしてください");
+        	request.getRequestDispatcher("/scoremanager/main/subject_create.jsp")
+            .forward(request, response);
+        }else if(old != null) {
+        	request.setAttribute("error", "科目コードが重複しています");
+        	request.getRequestDispatcher("/scoremanager/main/subject_create.jsp")
+        	.forward(request, response);
+        }else {
+        	// Subjectオブジェクト作成
+	        Subject subject = new Subject();
+	        subject.setCd(cd);
+	        subject.setName(name);
+	        subject.setSchool(school);
+	
+	        // DB登録
+	        SubjectDao dao = new SubjectDao();
+	        boolean result = dao.save(subject);
+	
+	        if (result) {
+	            // 登録成功
+	            request.getRequestDispatcher("/scoremanager/main/subject_create_done.jsp")
+	                   .forward(request, response);
+	        } else {
+	            // 登録失敗
+	            request.setAttribute("error", "登録に失敗しました。");
+	            request.getRequestDispatcher("/scoremanager/main/subject_create.jsp")
+	                   .forward(request, response);
+	        }
         }
+
+        
     }
 }
