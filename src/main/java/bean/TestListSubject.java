@@ -2,25 +2,20 @@ package bean;
 
 public class TestListSubject implements java.io.Serializable {
 	
-	private String no;
-	private String name;
 	private String classNum;
 	private int entYear;
-	private School school;
-	private boolean isAttend;
+	private String studentName;
+	private String studentNo;
+	private String points;
 	
-	public String getNo() {
-		return no;
-	
-	}
-	
-	public String getName() {
-		return name;
+	public int getEntYear;
+	public String getStudentNo() {
+		return studentNo;
 	
 	}
 	
-	public int getEntYear() {
-		return entYear;
+	public String getStudentName() {
+		return studentName;
 	
 	}
 	
@@ -29,41 +24,23 @@ public class TestListSubject implements java.io.Serializable {
 	
 	}
 	
-	public School getSchool() {
-		return school;
+	public String getPoint(int key) {
+		return points;
 	
 	}
 	
-	public boolean isAttend() {
-		return isAttend;
-	
+	public void setEntYear(int entYear) {
+		this.entYear = entYear;
 	}
 	
-	public void setNo() {
+	public void setStudentName(String classNum) {
 		return;
-	
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	
-	}
-	
-	public void setEntYear() {
-	
 	}
 	
 	public void setClassNum(String classNum) {
 		return;
-	
 	}
 	
-	public void setAttend() {
-	
+	public void putPoint(int key, int value) {
 	}
-	
-	public void setSchool(School school) {
-		this.school = school;
-	
 	}
-}
