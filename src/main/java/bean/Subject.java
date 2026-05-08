@@ -4,6 +4,7 @@ public class Subject implements java.io.Serializable {
 	private String cd;
 	private String name;
 	private School school;
+	
 	public String getCd() {
 		return cd;
 	}

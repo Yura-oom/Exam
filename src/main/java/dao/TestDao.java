@@ -12,12 +12,12 @@ import bean.Subject;
 import bean.Test;
 
 public class TestDao extends DAO{
-	public String baseSql = "select STUDENT_NO,SUBJECT_CD, SCHOOL_CD,NO,POINT,CLASS_NUM from TEST";
+	private String baseSql = "select STUDENT_NO, SUBJECT_CD, SCHOOL_CD,NO,POINT, CLASS_NUM from TEST";
 	
 	public Test get(Student student, Subject subject,School school, int no) throws Exception {
 		Test test = null;
 		try (Connection con = getConnection();
-				PreparedStatement st = con.prepareStatement(baseSql + "where STUDENT_NO=? and SUBJECT_CD=? and SCHOOL_CD=? and NO=?")) {
+				PreparedStatement st = con.prepareStatement(baseSql + " where STUDENT_NO=? and SUBJECT_CD=? and SCHOOL_CD=? and NO=?")) {
 					st.setString(1, student.getNo());
 					st.setString(2,subject.getCd());
 					st.setString(3,school.getCd());
@@ -30,6 +30,7 @@ public class TestDao extends DAO{
 				}
 				return test;
 	}
+	//beanにいれ変える
 	public List<Test> postFilter(ResultSet rSet, School school) throws Exception {
 		List<Test> list = new ArrayList<>();
 		while (rSet.next()) {
@@ -50,20 +51,25 @@ public class TestDao extends DAO{
 		}
 		return list;
 	}
+	//classNumなど　入れて　得点を　探す
 	public List<Test> filter(int entYear, String classNum, Subject subject, int num, School school) throws Exception {
 			List<Test> list = new ArrayList<>();
-			String sql = baseSql + "join STUDENT on TEST.STUDENT_NO = STUDENT.NO WHERE ENT_YEAR=?"
-					+ " AND CLASS_NUM=? AND SUBJECT_CD=? ANDTEST.NO=? AND TEST.SCHOOL_CD=?";
+			String sql = baseSql + " join STUDENT on TEST.STUDENT_NO = STUDENT.NO WHERE ENT_YEAR=?"
+					+ " and CLASS_NUM=? and SUBJECT_CD=? and TEST.NO=? and TEST.SCHOOL_CD=?";
 			try (Connection con = getConnection();
 					PreparedStatement st = con.prepareStatement(sql)) {
 				st.setInt(1,entYear);
 				st.setString(2,classNum);
 				st.setString(3,subject.getCd());
+				st.setInt(4, num);
+				st.setString(5,school.getCd());
+				
 				ResultSet rs = st.executeQuery();
 				list = postFilter(rs,school);
 			}
 			return list;
 	}
+	//得点を　保存する
 	public boolean save(List<Test> list)throws Exception {
 		Connection con = getConnection();
 		try {
@@ -80,6 +86,7 @@ public class TestDao extends DAO{
 		}
 		return true;
 	}
+	//得点を データベースの中に　保存する
 	public boolean save(Test test, Connection connection) throws Exception {
 		String sql = "merge into TEST key (STUDENT_NO, SUBJECT_CD, SCHOOL_CD, NO) values(?,?,?,?,?,?)";
 		try (PreparedStatement st = connection.prepareStatement(sql)) {
