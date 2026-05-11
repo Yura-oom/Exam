@@ -169,6 +169,31 @@ public class StudentDao extends DAO{
 		return list;
 	}
 	
+	public List<Integer> getEntYearSet(School school) throws Exception {
+		 
+		List<Integer> list = new ArrayList<>();
+ 
+		Connection con = getConnection();
+ 
+		String sql = "select distinct ent_year from student where school_cd = ? order by ent_year desc";
+ 
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, school.getCd());
+ 
+		ResultSet rs = st.executeQuery();
+ 
+		while (rs.next()) {
+			list.add(rs.getInt("ent_year"));
+		}
+ 
+		rs.close();
+		st.close();
+		con.close();
+ 
+		return list;
+	
+	}
+	
 	public List<Student> filter(School school, boolean isAttend)throws Exception{
 		
 		List<Student> list = new ArrayList<>();
