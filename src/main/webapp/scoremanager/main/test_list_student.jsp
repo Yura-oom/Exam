@@ -143,10 +143,10 @@
 
 						<div class="field-group">
 							<label class="field-label">入学年度</label>
-							<select name="entYear" class="search-select year">
+							<select name="ent_year" class="search-select year">
 								<option value="">----------</option>
-								<c:forEach var="year" items="${entYearSet}">
-									<option value="${year}" <c:if test="${year == entYear}">selected</c:if>>
+								<c:forEach var="year" items="${ent_year_set}">
+									<option value="${year}" <c:if test="${year == ent_year || year.toString() == ent_year}">selected</c:if>>
 										${year}
 									</option>
 								</c:forEach>
@@ -155,10 +155,10 @@
 
 						<div class="field-group">
 							<label class="field-label">クラス</label>
-							<select name="classNum" class="search-select classnum">
+							<select name="class_num" class="search-select classnum">
 								<option value="">----------</option>
-								<c:forEach var="cnum" items="${classNumSet}">
-									<option value="${cnum}" <c:if test="${cnum == classNum}">selected</c:if>>
+								<c:forEach var="cnum" items="${class_num_set}">
+									<option value="${cnum}" <c:if test="${cnum == class_num}">selected</c:if>>
 										${cnum}
 									</option>
 								</c:forEach>
@@ -167,10 +167,10 @@
 
 						<div class="field-group">
 							<label class="field-label">科目</label>
-							<select name="subjectCd" class="search-select subject">
+							<select name="subject_cd" class="search-select subject">
 								<option value="">----------</option>
-								<c:forEach var="sub" items="${subjectSet}">
-									<option value="${sub.cd}" <c:if test="${sub.cd == subjectCd}">selected</c:if>>
+								<c:forEach var="sub" items="${subject_set}">
+									<option value="${sub.cd}" <c:if test="${sub.cd == subject_cd}">selected</c:if>>
 										${sub.name}
 									</option>
 								</c:forEach>
@@ -185,7 +185,7 @@
 
 				<div class="search-divider"></div>
 
-				<form action="TestListStudent.action" method="get">
+				<form action="TestListStudentExecute.action" method="get">
 					<div class="search-row">
 						<div class="search-left-label">学生情報</div>
 
@@ -193,8 +193,8 @@
 							<label class="field-label">学生番号</label>
 							<input
 								type="text"
-								name="studentNo"
-								value="${studentNo}"
+								name="student_no"
+								value="${student_no}"
 								class="search-input studentno"
 								placeholder="学生番号を入力してください"
 								required
@@ -210,15 +210,15 @@
 
 			<c:if test="${not empty student}">
 				<div class="student-name">
-					氏名：${student.name} (${student.no})
+					氏名：${student.name}（${student.no}）
 				</div>
 			</c:if>
 
-			<c:if test="${not empty commonError}">
-				<div class="common-error">${commonError}</div>
+			<c:if test="${not empty error}">
+				<div class="common-error">${error}</div>
 			</c:if>
 
-			<c:if test="${not empty testList}">
+			<c:if test="${not empty list}">
 				<div class="score-table-wrap">
 					<table class="score-table">
 						<thead>
@@ -230,11 +230,11 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="test" items="${testList}">
+							<c:forEach var="test" items="${list}">
 								<tr>
 									<td>${test.subjectName}</td>
 									<td>${test.subjectCd}</td>
-									<td>${test.no}</td>
+									<td>${test.num}</td>
 									<td>${test.point}</td>
 								</tr>
 							</c:forEach>

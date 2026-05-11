@@ -5,6 +5,7 @@ import java.util.List;
 import bean.Student;
 import bean.Teacher;
 import bean.TestListStudent;
+import dao.StudentDao;
 import dao.TestListStudentDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,57 +14,44 @@ import tool.Action;
 public class TestListStudentExecuteAction extends Action {
 
     @Override
-
     public void execute(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+
         request.setCharacterEncoding("UTF-8");
 
-        // 学生番号取得
-        String studentNo =
-                request.getParameter("student_no");
+        String studentNo = request.getParameter("student_no");
 
-        // ログイン中の先生取得
         Teacher teacher =
-                (Teacher) request.getSession()
-                .getAttribute("user");
+                (Teacher) request.getSession().getAttribute("user");
 
-        // ログインチェック
         if (teacher == null) {
-            response.sendRedirect(
-                    request.getContextPath() + "/login.jsp");
-
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
-
         }
 
-        // Studentインスタンス生成
-        Student student = new Student();
-        student.setNo(studentNo);
+        StudentDao studentDao = new StudentDao();
+        Student student = studentDao.get(studentNo);
 
-        // DAO生成
-        TestListStudentDao testListStudentDao =
-                new TestListStudentDao();
+        if (student == null) {
+            request.setAttribute("error", "学生情報が存在しませんでした。");
+        } else {
+            TestListStudentDao testListStudentDao =
+                    new TestListStudentDao();
 
-        // 成績一覧取得
-        List<TestListStudent> list =
-                testListStudentDao.filter(student);
+            List<TestListStudent> list =
+                    testListStudentDao.filter(student);
 
-        // request scopeへセット
-        request.setAttribute(
-                "student_no",studentNo);
+            request.setAttribute("student", student);
+            request.setAttribute("list", list);
 
-        request.setAttribute(
+            if (list == null || list.isEmpty()) {
+                request.setAttribute("error", "成績情報が存在しませんでした。");
+            }
+        }
 
-                "list",list);
+        request.setAttribute("student_no", studentNo);
 
-        // JSPへフォワード
-        request.getRequestDispatcher(
-
-                "test_list_student.jsp")
-
-                .forward(request, response);
-
+        request.getRequestDispatcher("test_list_student.jsp")
+               .forward(request, response);
     }
-
 }
- 

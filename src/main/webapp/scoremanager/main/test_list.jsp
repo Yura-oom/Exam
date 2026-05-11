@@ -149,7 +149,7 @@
 
 			<div class="test-search-box">
 				<!-- 科目情報検索 -->
-				<form action="TestList.action" method="get">
+				<form action="TestListSubject.action" method="get">
 					<div class="test-search-row">
 						<div class="test-side-label">科目情報</div>
 
@@ -157,7 +157,7 @@
 							<label class="test-field-label" for="entYear">入学年度</label>
 							<select name="ent_year" id="entYear" class="test-select w-year">
 								<option value="">----</option>
-								<c:forEach var="year" items="${entYearSet}">
+								<c:forEach var="year" items="${ent_year_set}">
 									<option value="${year}" <c:if test="${year == ent_year || year.toString() == ent_year}">selected</c:if>>
 										${year}
 									</option>
@@ -169,7 +169,7 @@
 							<label class="test-field-label" for="classNum">クラス</label>
 							<select name="class_num" id="classNum" class="test-select w-class">
 								<option value="">----</option>
-								<c:forEach var="cnum" items="${classNumSet}">
+								<c:forEach var="cnum" items="${class_num_set}">
 									<option value="${cnum}" <c:if test="${cnum == class_num}">selected</c:if>>
 										${cnum}
 									</option>
@@ -181,7 +181,7 @@
 							<label class="test-field-label" for="subjectCd">科目</label>
 							<select name="subject_cd" id="subjectCd" class="test-select w-subject">
 								<option value="">----</option>
-								<c:forEach var="subject" items="${subjectSet}">
+								<c:forEach var="subject" items="${subject_set}">
 									<option value="${subject.cd}" <c:if test="${subject.cd == subject_cd}">selected</c:if>>
 										${subject.name}
 									</option>
@@ -190,7 +190,7 @@
 						</div>
 
 						<div style="padding-bottom: 0;">
-							<button type="submit" name="mode" value="subject" class="test-search-btn">検索</button>
+							<button type="submit" class="test-search-btn">検索</button>
 						</div>
 					</div>
 				</form>
@@ -198,7 +198,7 @@
 				<div class="test-divider"></div>
 
 				<!-- 学生情報検索 -->
-				<form action="TestList.action" method="get">
+				<form action="TestListStudentExecute.action" method="get">
 					<div class="test-search-row">
 						<div class="test-side-label">学生情報</div>
 
@@ -211,17 +211,18 @@
 								value="${student_no}"
 								class="test-input w-studentno"
 								placeholder="学生番号を入力してください"
+								required
 							>
 						</div>
 
 						<div style="padding-bottom: 0;">
-							<button type="submit" name="mode" value="student" class="test-search-btn">検索</button>
+							<button type="submit" class="test-search-btn">検索</button>
 						</div>
 					</div>
 				</form>
 			</div>
 
-			<c:if test="${empty mode and empty error and empty tests}">
+			<c:if test="${empty student and empty error and empty list}">
 				<div class="test-guide">
 					科目情報を選択または学生情報を入力して検索ボタンをクリックしてください
 				</div>
@@ -237,13 +238,7 @@
 				</div>
 			</c:if>
 
-			<c:if test="${not empty subject}">
-				<div class="test-info">
-					科目：${subject.name}
-				</div>
-			</c:if>
-
-			<c:if test="${not empty tests}">
+			<c:if test="${not empty list}">
 				<table class="test-result-table">
 					<thead>
 						<tr>
@@ -254,11 +249,11 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="test" items="${tests}">
+						<c:forEach var="test" items="${list}">
 							<tr>
-								<td>${test.subject.name}</td>
-								<td>${test.subject.cd}</td>
-								<td class="center">${test.no}</td>
+								<td>${test.subjectName}</td>
+								<td>${test.subjectCd}</td>
+								<td class="center">${test.num}</td>
 								<td class="center">${test.point}</td>
 							</tr>
 						</c:forEach>
