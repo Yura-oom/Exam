@@ -39,7 +39,7 @@ public class TestListStudentDao extends DAO {
 
         try {
             String sql =
-                    "SELECT SUB.NAME, T.SUBJECT_CD, T.NO, T.POINT " +
+                    "SELECT DISTINCT SUB.NAME, T.SUBJECT_CD, T.NO, T.POINT " +
                     "FROM TEST T " +
                     "JOIN SUBJECT SUB ON T.SUBJECT_CD = SUB.CD " +
                     "AND T.SCHOOL_CD = SUB.SCHOOL_CD " +
