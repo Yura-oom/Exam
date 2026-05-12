@@ -26,11 +26,8 @@ public class TestListSubjectDao extends DAO {
 			+ "left join test t "
 			+ "on s.no = t.student_no "
 			+ "and t.subject_cd = ? "
-			+ "and t.school_cd = ? "
-			+ "where s.school_cd = ? "
-			+ "and s.ent_year = ? "
+			+ "where s.ent_year = ? "
 			+ "and s.class_num = ? "
-			+ "and s.is_attend = true "
 			+ "order by s.no, t.no";
 
 	private List<TestListSubject> postFilter(ResultSet rs) throws Exception {
@@ -79,10 +76,8 @@ public class TestListSubjectDao extends DAO {
 		PreparedStatement st = con.prepareStatement(baseSql);
 
 		st.setString(1, subject.getCd());
-		st.setString(2, school.getCd());
-		st.setString(3, school.getCd());
-		st.setInt(4, entYear);
-		st.setString(5, classNum);
+		st.setInt(2, entYear);
+		st.setString(3, classNum);
 
 		ResultSet rs = st.executeQuery();
 

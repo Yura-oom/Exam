@@ -195,20 +195,19 @@
 										<td>${test.classNum}</td>
 										<td>${test.studentNo}</td>
 										<td>${test.studentName}</td>
-
 										<td>
-											<c:choose>
-												<c:when test="${empty test.points[1]}">-</c:when>
-												<c:otherwise>${test.points[1]}</c:otherwise>
-											</c:choose>
-										</td>
+			<c:choose>
+				<c:when test="${test.getPoint(1) == null}">-</c:when>
+				<c:otherwise>${test.getPoint(1)}</c:otherwise>
+			</c:choose>
+		</td>
 
-										<td>
-											<c:choose>
-												<c:when test="${empty test.points[2]}">-</c:when>
-												<c:otherwise>${test.points[2]}</c:otherwise>
-											</c:choose>
-										</td>
+		<td>
+			<c:choose>
+				<c:when test="${test.getPoint(2) == null}">-</c:when>
+				<c:otherwise>${test.getPoint(2)}</c:otherwise>
+			</c:choose>
+		</td>
 									</tr>
 								</c:forEach>
 							</table>
