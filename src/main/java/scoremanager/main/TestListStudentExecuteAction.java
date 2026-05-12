@@ -1,11 +1,15 @@
 package scoremanager.main;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import bean.Student;
 import bean.Teacher;
 import bean.TestListStudent;
+import dao.ClassNumDao;
 import dao.StudentDao;
+import dao.SubjectDao;
 import dao.TestListStudentDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,45 +17,85 @@ import tool.Action;
 
 public class TestListStudentExecuteAction extends Action {
 
-    @Override
-    public void execute(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+	@Override
+	public void execute(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 
-        request.setCharacterEncoding("UTF-8");
+		request.setCharacterEncoding("UTF-8");
 
-        String studentNo = request.getParameter("student_no");
+		String studentNo = request.getParameter("student_no");
 
-        Teacher teacher =
-                (Teacher) request.getSession().getAttribute("user");
+		Teacher teacher =
+				(Teacher) request.getSession().getAttribute("user");
 
-        if (teacher == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
-            return;
-        }
+		if (teacher == null) {
+			teacher =
+					(Teacher) request.getSession().getAttribute("teacher");
+		}
 
-        StudentDao studentDao = new StudentDao();
-        Student student = studentDao.get(studentNo);
+		if (teacher == null) {
+			response.sendRedirect(request.getContextPath() + "/login.jsp");
+			return;
+		}
 
-        if (student == null) {
-            request.setAttribute("error", "学生情報が存在しませんでした。");
-        } else {
-            TestListStudentDao testListStudentDao =
-                    new TestListStudentDao();
+		setSelectData(request, teacher);
 
-            List<TestListStudent> list =
-                    testListStudentDao.filter(student);
+		if (studentNo == null || studentNo.equals("")) {
+			request.setAttribute("error", "学生番号を入力してください。");
 
-            request.setAttribute("student", student);
-            request.setAttribute("list", list);
+			request.getRequestDispatcher("test_list_student.jsp")
+					.forward(request, response);
+			return;
+		}
 
-            if (list == null || list.isEmpty()) {
-                request.setAttribute("error", "成績情報が存在しませんでした。");
-            }
-        }
+		StudentDao studentDao = new StudentDao();
+		Student student = studentDao.get(studentNo);
 
-        request.setAttribute("student_no", studentNo);
+		if (student == null) {
+			request.setAttribute("error", "学生情報が存在しませんでした。");
+		} else {
+			TestListStudentDao testListStudentDao =
+					new TestListStudentDao();
 
-        request.getRequestDispatcher("test_list_student.jsp")
-               .forward(request, response);
-    }
+			List<TestListStudent> list =
+					testListStudentDao.filter(student);
+
+			request.setAttribute("student", student);
+			request.setAttribute("list", list);
+
+			if (list == null || list.isEmpty()) {
+				request.setAttribute("error", "成績情報が存在しませんでした。");
+			}
+		}
+
+		request.setAttribute("student_no", studentNo);
+
+		request.getRequestDispatcher("test_list_student.jsp")
+				.forward(request, response);
+	}
+
+	private void setSelectData(HttpServletRequest request, Teacher teacher)
+			throws Exception {
+
+		List<Integer> entYearSet = new ArrayList<>();
+
+		int thisYear = LocalDate.now().getYear();
+
+		for (int i = thisYear - 10; i <= thisYear + 1; i++) {
+			entYearSet.add(i);
+		}
+
+		ClassNumDao classNumDao = new ClassNumDao();
+		SubjectDao subjectDao = new SubjectDao();
+
+		request.setAttribute("entYearSet", entYearSet);
+
+		request.setAttribute(
+				"classNumSet",
+				classNumDao.filter(teacher.getSchool()));
+
+		request.setAttribute(
+				"subjectSet",
+				subjectDao.filter(teacher.getSchool()));
+	}
 }

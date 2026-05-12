@@ -149,7 +149,7 @@
 
 			<div class="test-search-box">
 				<!-- 科目情報検索 -->
-				<form action="TestListSubject.action" method="get">
+				<form action="TestListSubjectExecute.action" method="get">
 					<div class="test-search-row">
 						<div class="test-side-label">科目情報</div>
 

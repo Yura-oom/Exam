@@ -1,15 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
+ 
 <c:import url="/common/base.jsp">
 	<c:param name="title">成績一覧（学生）</c:param>
-
+ 
 	<c:param name="content">
 		<style>
 			.test-list-wrap {
 				padding: 0 10px;
 			}
-
+ 
 			.test-list-title {
 				background-color: #f3f3f3;
 				padding: 10px 16px;
@@ -18,43 +18,43 @@
 				color: #222;
 				margin-bottom: 12px;
 			}
-
+ 
 			.search-box {
 				border: 1px solid #dcdcdc;
 				border-radius: 4px;
 				padding: 18px 20px 10px 20px;
 				margin: 0 12px 14px 12px;
 			}
-
+ 
 			.search-row {
 				display: flex;
 				align-items: center;
 				margin-bottom: 14px;
 				gap: 16px;
 			}
-
+ 
 			.search-left-label {
 				width: 90px;
 				font-size: 13px;
 				color: #444;
 			}
-
+ 
 			.search-divider {
 				border-top: 1px solid #e5e5e5;
 				margin: 10px 0 14px 0;
 			}
-
+ 
 			.field-group {
 				display: flex;
 				flex-direction: column;
 				gap: 6px;
 			}
-
+ 
 			.field-label {
 				font-size: 13px;
 				color: #444;
 			}
-
+ 
 			.search-select,
 			.search-input {
 				height: 34px;
@@ -64,23 +64,23 @@
 				border-radius: 4px;
 				box-sizing: border-box;
 			}
-
+ 
 			.search-select.year {
 				width: 120px;
 			}
-
+ 
 			.search-select.classnum {
 				width: 120px;
 			}
-
+ 
 			.search-select.subject {
 				width: 180px;
 			}
-
+ 
 			.search-input.studentno {
 				width: 220px;
 			}
-
+ 
 			.search-btn {
 				background-color: #6c757d;
 				color: white;
@@ -90,29 +90,29 @@
 				font-size: 13px;
 				cursor: pointer;
 			}
-
+ 
 			.student-name {
 				margin: 0 12px 6px 12px;
 				font-size: 13px;
 				color: #333;
 			}
-
+ 
 			.common-error {
 				margin: 0 12px 10px 12px;
 				font-size: 13px;
 				color: #49c5e6;
 			}
-
+ 
 			.score-table-wrap {
 				margin: 0 12px;
 			}
-
+ 
 			.score-table {
 				width: 100%;
 				border-collapse: collapse;
 				font-size: 13px;
 			}
-
+ 
 			.score-table th,
 			.score-table td {
 				border-top: 1px solid #e5e5e5;
@@ -120,7 +120,7 @@
 				text-align: left;
 				color: #333;
 			}
-
+ 
 			.score-table th:nth-child(2),
 			.score-table td:nth-child(2),
 			.score-table th:nth-child(3),
@@ -131,64 +131,64 @@
 				width: 90px;
 			}
 		</style>
-
+ 
 		<div class="test-list-wrap">
 			<div class="test-list-title">成績一覧（学生）</div>
-
+ 
 			<div class="search-box">
-
-				<form action="TestListSubject.action" method="get">
+ 
+				<form action="TestListSubjectExecute.action" method="get">
 					<div class="search-row">
 						<div class="search-left-label">科目情報</div>
-
+ 
 						<div class="field-group">
-							<label class="field-label">入学年度</label>
-							<select name="ent_year" class="search-select year">
-								<option value="">----------</option>
-								<c:forEach var="year" items="${ent_year_set}">
-									<option value="${year}" <c:if test="${year == ent_year || year.toString() == ent_year}">selected</c:if>>
-										${year}
-									</option>
-								</c:forEach>
-							</select>
-						</div>
-
+								<label class="field-label">入学年度</label>
+								<select name="ent_year" class="search-select year">
+									<option value="">----------</option>
+									<c:forEach var="year" items="${entYearSet}">
+										<option value="${year}" <c:if test="${year == ent_year}">selected</c:if>>
+											${year}
+										</option>
+									</c:forEach>
+								</select>
+							</div>
+ 
 						<div class="field-group">
-							<label class="field-label">クラス</label>
-							<select name="class_num" class="search-select classnum">
-								<option value="">----------</option>
-								<c:forEach var="cnum" items="${class_num_set}">
-									<option value="${cnum}" <c:if test="${cnum == class_num}">selected</c:if>>
-										${cnum}
-									</option>
-								</c:forEach>
-							</select>
-						</div>
-
+								<label class="field-label">クラス</label>
+								<select name="class_num" class="search-select classnum">
+									<option value="">----------</option>
+									<c:forEach var="cnum" items="${classNumSet}">
+										<option value="${cnum}" <c:if test="${cnum == class_num}">selected</c:if>>
+											${cnum}
+										</option>
+									</c:forEach>
+								</select>
+							</div>
+ 
 						<div class="field-group">
-							<label class="field-label">科目</label>
-							<select name="subject_cd" class="search-select subject">
-								<option value="">----------</option>
-								<c:forEach var="sub" items="${subject_set}">
-									<option value="${sub.cd}" <c:if test="${sub.cd == subject_cd}">selected</c:if>>
-										${sub.name}
-									</option>
-								</c:forEach>
-							</select>
-						</div>
-
+								<label class="field-label">科目</label>
+								<select name="subject_cd" class="search-select subject">
+									<option value="">----------</option>
+									<c:forEach var="sub" items="${subjectSet}">
+										<option value="${sub.cd}" <c:if test="${sub.cd == subject_cd}">selected</c:if>>
+											${sub.name}
+										</option>
+									</c:forEach>
+								</select>
+							</div>
+ 
 						<div style="padding-top: 22px;">
 							<button type="submit" class="search-btn">検索</button>
 						</div>
 					</div>
 				</form>
-
+ 
 				<div class="search-divider"></div>
-
+ 
 				<form action="TestListStudentExecute.action" method="get">
 					<div class="search-row">
 						<div class="search-left-label">学生情報</div>
-
+ 
 						<div class="field-group">
 							<label class="field-label">学生番号</label>
 							<input
@@ -200,24 +200,24 @@
 								required
 							>
 						</div>
-
+ 
 						<div style="padding-top: 22px;">
 							<button type="submit" class="search-btn">検索</button>
 						</div>
 					</div>
 				</form>
 			</div>
-
+ 
 			<c:if test="${not empty student}">
 				<div class="student-name">
 					氏名：${student.name}（${student.no}）
 				</div>
 			</c:if>
-
+ 
 			<c:if test="${not empty error}">
 				<div class="common-error">${error}</div>
 			</c:if>
-
+ 
 			<c:if test="${not empty list}">
 				<div class="score-table-wrap">
 					<table class="score-table">
@@ -242,7 +242,8 @@
 					</table>
 				</div>
 			</c:if>
-
+ 
 		</div>
 	</c:param>
 </c:import>
+ 
