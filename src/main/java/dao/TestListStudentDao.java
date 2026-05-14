@@ -11,62 +11,100 @@ import bean.TestListStudent;
 
 public class TestListStudentDao extends DAO {
 
-    private List<TestListStudent> postFilter(ResultSet rs) throws Exception {
+	 // ResultSetのデータを
+	  //TestListStudentのListへ変換するメソッド
+	private List<TestListStudent> postFilter(ResultSet rs) throws Exception {
 
-        List<TestListStudent> list = new ArrayList<>();
+		// 成績一覧リスト生成
+		List<TestListStudent> list = new ArrayList<>();
 
-        while (rs.next()) {
-            TestListStudent test = new TestListStudent();
+		// ResultSetから1件ずつ取得
+		while (rs.next()) {
 
-            test.setSubjectName(rs.getString("NAME"));
-            test.setSubjectCd(rs.getString("SUBJECT_CD"));
-            test.setNum(rs.getInt("NO"));
-            test.setPoint(rs.getInt("POINT"));
+			// TestListStudentインスタンス生成
+			TestListStudent test = new TestListStudent();
+			
+			test.setSubjectName(
+					rs.getString("NAME"));
 
-            list.add(test);
-        }
+			test.setSubjectCd(
+					rs.getString("SUBJECT_CD"));
 
-        return list;
-    }
+			test.setNum(
+					rs.getInt("NO"));
 
-    public List<TestListStudent> filter(Student student) throws Exception {
+			test.setPoint(
+					rs.getInt("POINT"));
 
-        List<TestListStudent> list = new ArrayList<>();
+			list.add(test);
+		}
 
-        Connection connection = getConnection();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+		// 成績一覧返却
+		return list;
+	}
 
-        try {
-            String sql =
-                    "SELECT DISTINCT SUB.NAME, T.SUBJECT_CD, T.NO, T.POINT " +
-                    "FROM TEST T " +
-                    "JOIN SUBJECT SUB ON T.SUBJECT_CD = SUB.CD " +
-                    "AND T.SCHOOL_CD = SUB.SCHOOL_CD " +
-                    "WHERE T.STUDENT_NO = ? " +
-                    "ORDER BY T.SUBJECT_CD ASC, T.NO ASC";
+	 //学生番号をもとに
+	 //学生成績一覧を取得するメソッド
+	public List<TestListStudent> filter(Student student) throws Exception {
 
-            statement = connection.prepareStatement(sql);
-            statement.setString(1, student.getNo());
+		// 成績一覧リスト生成
+		List<TestListStudent> list = new ArrayList<>();
 
-            resultSet = statement.executeQuery();
+		// データベース接続
+		Connection connection = getConnection();
 
-            list = postFilter(resultSet);
+		// SQL実行用PreparedStatement
+		PreparedStatement statement = null;
 
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
+		// SQL結果格納用ResultSet
+		ResultSet resultSet = null;
 
-            if (statement != null) {
-                statement.close();
-            }
+		try {
 
-            if (connection != null) {
-                connection.close();
-            }
-        }
+			// SQL文作成
+			String sql =
+					"SELECT DISTINCT SUB.NAME, T.SUBJECT_CD, T.NO, T.POINT " +
+					"FROM TEST T " +
+					"JOIN SUBJECT SUB ON T.SUBJECT_CD = SUB.CD " +
+					"AND T.SCHOOL_CD = SUB.SCHOOL_CD " +
+					"WHERE T.STUDENT_NO = ? " +
+					"ORDER BY T.SUBJECT_CD ASC, T.NO ASC";
 
-        return list;
-    }
+			// SQL準備
+			statement =
+					connection.prepareStatement(sql);
+
+			// 学生番号セット
+			statement.setString(
+					1,
+					student.getNo());
+
+			// SQL実行
+			resultSet =
+					statement.executeQuery();
+
+			// ResultSetをListへ変換
+			list = postFilter(resultSet);
+
+		} finally {
+
+			// ResultSetを閉じる
+			if (resultSet != null) {
+				resultSet.close();
+			}
+
+			// PreparedStatementを閉じる
+			if (statement != null) {
+				statement.close();
+			}
+
+			// Connectionを閉じる
+			if (connection != null) {
+				connection.close();
+			}
+		}
+
+		// 成績一覧返却
+		return list;
+	}
 }
