@@ -11,10 +11,11 @@ public class SchoolDao extends DAO{
 		School school = null;
 		
 		Connection con = getConnection();
-		
+		//DAOに接続です
 		PreparedStatement st;
 		st=con.prepareStatement(
 				"select * from school where cd = ?");
+		//schoolテーブルのデータをとる命令です
 		st.setString(1, cd);
 		ResultSet rs = st.executeQuery();
 		
