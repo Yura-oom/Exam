@@ -38,6 +38,7 @@
 			.test-regist-done-link a {
 				color: #4a73ff;
 				text-decoration: underline;
+				padding: 0 30px 0 0;
 			}
 		</style>
  
@@ -50,6 +51,7 @@
  
 			<div class="test-regist-done-link">
 				<a href="TestRegist.action">戻る</a>
+				<a href="TestList.action">成績参照</a>
 			</div>
 		</div>
 	</c:param>

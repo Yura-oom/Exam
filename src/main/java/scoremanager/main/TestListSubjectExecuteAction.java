@@ -57,7 +57,7 @@ public class TestListSubjectExecuteAction extends Action {
 					"入学年度・クラス・科目を選択してください");
 
 			// JSPへフォワード
-			request.getRequestDispatcher("test_list_subject.jsp")
+			request.getRequestDispatcher("TestList.action")
 					.forward(request, response);
 			return;
 		}

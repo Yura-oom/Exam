@@ -156,7 +156,7 @@
 						<div class="test-field">
 							<label class="test-field-label" for="entYear">入学年度</label>
 							<select name="ent_year" id="entYear" class="test-select w-year">
-								<option value="">----</option>
+								<option value="">--------</option>
 								<c:forEach var="year" items="${ent_year_set}">
 									<option value="${year}" <c:if test="${year == ent_year || year.toString() == ent_year}">selected</c:if>>
 										${year}
@@ -164,11 +164,11 @@
 								</c:forEach>
 							</select>
 						</div>
-
+						
 						<div class="test-field">
 							<label class="test-field-label" for="classNum">クラス</label>
 							<select name="class_num" id="classNum" class="test-select w-class">
-								<option value="">----</option>
+								<option value="">--------</option>
 								<c:forEach var="cnum" items="${class_num_set}">
 									<option value="${cnum}" <c:if test="${cnum == class_num}">selected</c:if>>
 										${cnum}
@@ -180,7 +180,7 @@
 						<div class="test-field">
 							<label class="test-field-label" for="subjectCd">科目</label>
 							<select name="subject_cd" id="subjectCd" class="test-select w-subject">
-								<option value="">----</option>
+								<option value="">--------</option>
 								<c:forEach var="subject" items="${subject_set}">
 									<option value="${subject.cd}" <c:if test="${subject.cd == subject_cd}">selected</c:if>>
 										${subject.name}
@@ -194,7 +194,11 @@
 						</div>
 					</div>
 				</form>
-
+				
+				<c:if test="${not empty error}">
+					<div class="test-error">${error}</div>
+				</c:if>
+				
 				<div class="test-divider"></div>
 
 				<!-- 学生情報検索 -->
@@ -222,15 +226,13 @@
 				</form>
 			</div>
 
-			<c:if test="${empty student and empty error and empty list}">
+			<c:if test="${empty student and empty list}">
 				<div class="test-guide">
 					科目情報を選択または学生情報を入力して検索ボタンをクリックしてください
 				</div>
 			</c:if>
 
-			<c:if test="${not empty error}">
-				<div class="test-error">${error}</div>
-			</c:if>
+			
 
 			<c:if test="${not empty student}">
 				<div class="test-info">
